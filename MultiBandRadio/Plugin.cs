@@ -38,7 +38,7 @@ namespace MultiBandRadio
             base.OnEnabled();
         }
 
-        public override void OnDisabled() 
+        public override void OnDisabled()
         {
             MorkamoEventsRegistrator.Plugin.RemoveRegistrator(_menu);
             MorkamoEventsRegistrator.Plugin.RemoveRegistrator(_radioHandler);

@@ -1,4 +1,5 @@
-﻿using LabApi.Events.Arguments.PlayerEvents;
+﻿using System;
+using LabApi.Events.Arguments.PlayerEvents;
 using MorkamoEventsRegistrator.Components;
 using MultiBandRadio.Components.Extensions;
 using VoiceChat;
@@ -16,24 +17,28 @@ public class RadioHandler : IEventsRegistrator
         if (ev.Message.Channel != VoiceChatChannel.Radio)
             return;
 
-        if (ev.Player.AsExiled().MultiBandRadio().PlayerProps.IsEnabled)
+        try
         {
-            if (!ev.Sender.AsExiled().MultiBandRadio().PlayerProps.IsEnabled)
+            if (ev.Player.AsExiled().MultiBandRadio().PlayerProps.IsEnabled)
             {
-                ev.IsAllowed = false;
-                return;
-            }
+                if (!ev.Sender.AsExiled().MultiBandRadio().PlayerProps.IsEnabled)
+                {
+                    ev.IsAllowed = false;
+                    return;
+                }
 
-            if (ev.Player.AsExiled().MultiBandRadio().PlayerProps.RadioBand !=
-                ev.Sender.AsExiled().MultiBandRadio().PlayerProps.RadioBand)
+                if (ev.Player.AsExiled().MultiBandRadio().PlayerProps.RadioBand !=
+                    ev.Sender.AsExiled().MultiBandRadio().PlayerProps.RadioBand)
+                {
+                    ev.IsAllowed = false;
+                }
+            }
+            else
             {
-                ev.IsAllowed = false;
+                if (ev.Sender.AsExiled().MultiBandRadio().PlayerProps.IsEnabled)
+                    ev.IsAllowed = false;
             }
         }
-        else
-        {
-            if (ev.Sender.AsExiled().MultiBandRadio().PlayerProps.IsEnabled)
-                ev.IsAllowed = false;
-        }
+        catch { /*ignored*/ }
     }
 }

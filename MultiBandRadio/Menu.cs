@@ -33,11 +33,19 @@ namespace MultiBandRadio
 
         public void OnJoined(PlayerJoinedEventArgs ev)
         {
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalse
+            if (ev.Player == null || ev.Player.IsNpc)
+                return;
+            
             Menus[ev.Player] = new PlayerMenu(Generate, ev.Player);
         }
 
         public void OnLeft(PlayerLeftEventArgs ev)
         {
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalse
+            if (ev.Player == null || ev.Player.IsNpc)
+                return;
+            
             if (Menus.TryGetValue(ev.Player, out PlayerMenu menu))
                 menu.Destroy();
         }
